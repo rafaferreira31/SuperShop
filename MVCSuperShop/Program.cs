@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVCSuperShop.Data;
 
@@ -9,6 +10,7 @@ namespace MVCSuperShop
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
@@ -17,7 +19,13 @@ namespace MVCSuperShop
                 cfg.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            builder.Services.AddTransient<SeedDb>();
+            
+            builder.Services.AddControllersWithViews();
+
             var app = builder.Build();
+
+            RunSeeding(app);
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -39,6 +47,17 @@ namespace MVCSuperShop
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
+        }
+
+        private static void RunSeeding(WebApplication app)
+        {
+            var scopeFactory = app.Services.GetService<IServiceScopeFactory>();
+
+            using(var scope = scopeFactory.CreateScope())
+            {
+                var seeder = scope.ServiceProvider.GetService<SeedDb>();
+                seeder.SeedAsync().Wait();
+            }
         }
     }
 }
