@@ -16,7 +16,7 @@ namespace MVCSuperShop.Controllers
 
         public ProductsController(DataContext context)
         {
-            _context = context;
+            _context = context;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
         }
 
         // GET: Products
