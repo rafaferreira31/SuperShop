@@ -21,7 +21,7 @@ namespace MVCSuperShop
 
             builder.Services.AddTransient<SeedDb>();
             
-            builder.Services.AddScoped<IRepository, Repository>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
             builder.Services.AddControllersWithViews();
 
