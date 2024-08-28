@@ -1,6 +1,10 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVCSuperShop.Data;
+using MVCSuperShop.Data.Entities;
+using MVCSuperShop.Helpers;
+using System.Security.Policy;
 
 namespace MVCSuperShop
 {
@@ -14,13 +18,27 @@ namespace MVCSuperShop
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddIdentity<User, IdentityRole>(cfg =>
+            {
+                cfg.User.RequireUniqueEmail = true;
+                cfg.Password.RequireDigit = false;
+                cfg.Password.RequiredUniqueChars = 0;
+                cfg.Password.RequireLowercase = false;
+                cfg.Password.RequireUppercase = false;
+                cfg.Password.RequireNonAlphanumeric = false;
+                cfg.Password.RequiredLength = 6;
+            })
+                .AddEntityFrameworkStores<DataContext>();
+
             builder.Services.AddDbContext<DataContext>(cfg =>
             {
                 cfg.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
             builder.Services.AddTransient<SeedDb>();
-            
+
+            builder.Services.AddScoped<IUserHelper, UserHelper>();
+
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
             builder.Services.AddControllersWithViews();
@@ -41,6 +59,8 @@ namespace MVCSuperShop
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
