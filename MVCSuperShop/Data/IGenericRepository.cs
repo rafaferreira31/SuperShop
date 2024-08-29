@@ -1,8 +1,11 @@
-﻿namespace MVCSuperShop.Data
+﻿using System.Linq;
+using System.Threading.Tasks;
+
+namespace SuperShop.Data
 {
     public interface IGenericRepository<T> where T : class
     {
-        IQueryable<T> GetAll();
+        IQueryable<T> GetAll(); //Método q devolve todas as entidades q o "T" tiver a usar
 
         Task<T> GetByIdAsync(int id);
 
@@ -12,6 +15,6 @@
 
         Task DeleteAsync(T entity);
 
-        Task<bool> ExistsAsync(int id);
+        Task<bool> ExistAsync(int id);
     }
 }

@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
-using MVCSuperShop.Data.Entities;
+using SuperShop.Data.Entities;
 
-namespace MVCSuperShop.Data
+namespace SuperShop.Data
 {
     public class DataContext : IdentityDbContext<User>
     {
@@ -11,6 +10,7 @@ namespace MVCSuperShop.Data
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
+
         }
     }
 }

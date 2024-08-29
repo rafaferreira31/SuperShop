@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MVCSuperShop.Data.Entities;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using SuperShop.Data.Entities;
 
-namespace MVCSuperShop.Data
+namespace SuperShop.Data
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class, IEntity
     {
@@ -12,15 +14,17 @@ namespace MVCSuperShop.Data
             _context = context;
         }
 
-
         public IQueryable<T> GetAll()
         {
-            return _context.Set<T>().AsNoTracking();
+            return _context.Set<T>().AsNoTracking(); 
+            //vai a tabela buscar as coisas
         }
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+            return await _context.Set<T>()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task CreateAsync(T entity)
@@ -41,7 +45,7 @@ namespace MVCSuperShop.Data
             await SaveAllAsync();
         }
 
-        public async Task<bool> ExistsAsync(int id)
+        public async Task<bool> ExistAsync(int id)
         {
             return await _context.Set<T>().AnyAsync(e => e.Id == id);
         }

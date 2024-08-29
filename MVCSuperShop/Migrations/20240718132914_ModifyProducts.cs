@@ -1,14 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
-
-namespace MVCSuperShop.Migrations
+namespace SuperShop.Migrations
 {
-    /// <inheritdoc />
     public partial class ModifyProducts : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
@@ -17,8 +13,10 @@ namespace MVCSuperShop.Migrations
                 type: "nvarchar(50)",
                 maxLength: 50,
                 nullable: false,
+                defaultValue: "",
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+                oldType: "nvarchar(max)",
+                oldNullable: true);
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "LastSale",
@@ -37,14 +35,13 @@ namespace MVCSuperShop.Migrations
                 oldType: "datetime2");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "Products",
                 type: "nvarchar(max)",
-                nullable: false,
+                nullable: true,
                 oldClrType: typeof(string),
                 oldType: "nvarchar(50)",
                 oldMaxLength: 50);

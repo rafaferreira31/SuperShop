@@ -1,18 +1,14 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
-
-namespace MVCSuperShop.Migrations
+namespace SuperShop.Migrations
 {
-    /// <inheritdoc />
     public partial class AddUsers : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "userId",
+                name: "UserId",
                 table: "Products",
                 type: "nvarchar(450)",
                 nullable: true);
@@ -36,8 +32,8 @@ namespace MVCSuperShop.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -165,9 +161,9 @@ namespace MVCSuperShop.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_userId",
+                name: "IX_Products_UserId",
                 table: "Products",
-                column: "userId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -209,18 +205,18 @@ namespace MVCSuperShop.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Products_AspNetUsers_userId",
+                name: "FK_Products_AspNetUsers_UserId",
                 table: "Products",
-                column: "userId",
+                column: "UserId",
                 principalTable: "AspNetUsers",
-                principalColumn: "Id");
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Products_AspNetUsers_userId",
+                name: "FK_Products_AspNetUsers_UserId",
                 table: "Products");
 
             migrationBuilder.DropTable(
@@ -245,11 +241,11 @@ namespace MVCSuperShop.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropIndex(
-                name: "IX_Products_userId",
+                name: "IX_Products_UserId",
                 table: "Products");
 
             migrationBuilder.DropColumn(
-                name: "userId",
+                name: "UserId",
                 table: "Products");
         }
     }

@@ -1,10 +1,12 @@
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MVCSuperShop.Data;
-using MVCSuperShop.Data.Entities;
-using MVCSuperShop.Helpers;
-using System.Security.Policy;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using SuperShop.Data;
+using SuperShop.Data.Entities;
+using SuperShop.Helpers;
 
 namespace MVCSuperShop
 {
@@ -75,7 +77,7 @@ namespace MVCSuperShop
         {
             var scopeFactory = app.Services.GetService<IServiceScopeFactory>();
 
-            using(var scope = scopeFactory.CreateScope())
+            using (var scope = scopeFactory.CreateScope())
             {
                 var seeder = scope.ServiceProvider.GetService<SeedDb>();
                 seeder.SeedAsync().Wait();

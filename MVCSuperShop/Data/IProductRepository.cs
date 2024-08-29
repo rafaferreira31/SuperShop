@@ -1,6 +1,6 @@
-﻿using MVCSuperShop.Data.Entities;
+﻿using SuperShop.Data.Entities;
 
-namespace MVCSuperShop.Data
+namespace SuperShop.Data
 {
     public interface IProductRepository : IGenericRepository<Product>
     {

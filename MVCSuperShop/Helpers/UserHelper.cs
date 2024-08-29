@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MVCSuperShop.Data.Entities;
+using SuperShop.Data.Entities;
+using System.Threading.Tasks;
 
-namespace MVCSuperShop.Helpers
+namespace SuperShop.Helpers
 {
     public class UserHelper : IUserHelper
     {

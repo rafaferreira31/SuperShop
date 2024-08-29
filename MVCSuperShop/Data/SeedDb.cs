@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using MVCSuperShop.Data.Entities;
-using MVCSuperShop.Helpers;
+using SuperShop.Data.Entities;
+using SuperShop.Helpers;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace MVCSuperShop.Data
+namespace SuperShop.Data
 {
     public class SeedDb
     {
@@ -11,21 +13,19 @@ namespace MVCSuperShop.Data
         private readonly IUserHelper _userHelper;
         private Random _random;
 
-
-        public SeedDb(DataContext context, IUserHelper userHelper)
+        public SeedDb(DataContext context, IUserHelper UserHelper)
         {
             _context = context;
-            _userHelper = userHelper;
+            _userHelper = UserHelper;
             _random = new Random();
-
         }
 
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
 
-            var user = await _userHelper.GetUserByEmailAsync("rafagallardo31@gmail.com");
-            if (user == null)
+            var user = await _userHelper.GetUserByEmailAsync("eduardo.sousa.moreno@formandos.cinel.pt"); //admin, vê se já existe
+            if (user == null) // se não existir, cria
             {
                 user = new User
                 {
@@ -33,25 +33,26 @@ namespace MVCSuperShop.Data
                     LastName = "Ferreira",
                     Email = "rafagallardo31@gmail.com",
                     UserName = "rafagallardo31@gmail.com",
-                    PhoneNumber = "987123654"
+                    PhoneNumber = "987456321"
                 };
 
-                var result = await _userHelper.AddUserAsync(user, "123456");
-                if(result != IdentityResult.Success)
+                var result = await _userHelper.AddUserAsync(user, "123456"); //Password é metida à parte
+                if (result != IdentityResult.Success)
                 {
                     throw new InvalidOperationException("Could not create the user in seeder");
                 }
-            }
 
-            if(!_context.Products.Any())
-            {
-                AddProduct("Iphone X", user);
-                AddProduct("Magic Mouse", user);
-                AddProduct("IWatch Series 4", user);
-                AddProduct("Ipad Mini", user);
-                await _context.SaveChangesAsync();
+                if (!_context.Products.Any())
+                {
+                    AddProduct("iPhone X", user);
+                    AddProduct("Magic Mouse", user);
+                    AddProduct("iWatch Series 4", user);
+                    AddProduct("iPad Mini", user);
+                    await _context.SaveChangesAsync();
+                }
             }
         }
+
 
         private void AddProduct(string name, User user)
         {
@@ -61,7 +62,6 @@ namespace MVCSuperShop.Data
                 Price = _random.Next(1000),
                 IsAvailable = true,
                 Stock = _random.Next(100),
-                ImageUrl = "Image",
                 User = user
             });
         }

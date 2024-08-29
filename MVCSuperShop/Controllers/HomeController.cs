@@ -1,8 +1,13 @@
-using Microsoft.AspNetCore.Mvc;
-using MVCSuperShop.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using SuperShop.Models;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace MVCSuperShop.Controllers
+namespace SuperShop.Controllers
 {
     public class HomeController : Controller
     {

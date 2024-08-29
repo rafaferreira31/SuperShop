@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using MVCSuperShop.Data;
-using MVCSuperShop.Data.Entities;
-using MVCSuperShop.Helpers;
+using SuperShop.Data;
+using SuperShop.Data.Entities;
+using SuperShop.Helpers;
 
-namespace MVCSuperShop.Controllers
+namespace SuperShop.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly IProductRepository _productRepository;
         private readonly IUserHelper _userHelper;
 
-        public ProductsController(IProductRepository productRepository, IUserHelper userHelper)
+        public ProductsController(
+            IProductRepository productRepository, 
+            IUserHelper userHelper)
         {
             _productRepository = productRepository;
             _userHelper = userHelper;
@@ -25,7 +24,7 @@ namespace MVCSuperShop.Controllers
         // GET: Products
         public IActionResult Index()
         {
-            return View(_productRepository.GetAll().OrderBy(p => p.Name));
+            return View(_productRepository.GetAll().OrderBy(p => p.Name)); //ordenar por nome
         }
 
         // GET: Products/Details/5
@@ -60,11 +59,9 @@ namespace MVCSuperShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                //TODO: Modificar para o user que estiver logado
+                //TODO: Modificar para o user que tiver logado
                 product.User = await _userHelper.GetUserByEmailAsync("rafagallardo31@gmail.com");
-
                 await _productRepository.CreateAsync(product);
-                
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
@@ -91,7 +88,7 @@ namespace MVCSuperShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,Product product)
+        public async Task<IActionResult> Edit(int id, Product product)
         {
             if (id != product.Id)
             {
@@ -102,13 +99,11 @@ namespace MVCSuperShop.Controllers
             {
                 try
                 {
-                    //TODO: Modificar para o user que estiver logado
-                    product.User = await _userHelper.GetUserByEmailAsync("rafagallardo31@gmail.com");
                     await _productRepository.UpdateAsync(product);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (! await _productRepository.ExistsAsync(product.Id))
+                    if (! await _productRepository.ExistAsync(product.Id))
                     {
                         return NotFound();
                     }
@@ -145,10 +140,9 @@ namespace MVCSuperShop.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
-            
             await _productRepository.DeleteAsync(product);
-   
             return RedirectToAction(nameof(Index));
         }
+
     }
 }

@@ -1,14 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
-
-namespace MVCSuperShop.Migrations
+namespace SuperShop.Migrations
 {
-    /// <inheritdoc />
     public partial class InitDb : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -17,9 +13,9 @@ namespace MVCSuperShop.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastPurchase = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastSale = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false),
@@ -31,7 +27,6 @@ namespace MVCSuperShop.Migrations
                 });
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
