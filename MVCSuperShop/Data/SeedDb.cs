@@ -24,8 +24,11 @@ namespace SuperShop.Data
         {
             await _context.Database.EnsureCreatedAsync();
 
-            var user = await _userHelper.GetUserByEmailAsync("rafagallardo31@gmail.com");  
-            if (user == null) 
+            await _userHelper.CheckRoleAsync("Admin");
+            await _userHelper.CheckRoleAsync("Customer");
+
+            var user = await _userHelper.GetUserByEmailAsync("rafagallardo31@gmail.com");
+            if (user == null)
             {
                 user = new User
                 {
@@ -42,15 +45,24 @@ namespace SuperShop.Data
                     throw new InvalidOperationException("Could not create the user in seeder");
                 }
 
-                if (!_context.Products.Any())
-                {
-                    AddProduct("iPhone X", user);
-                    AddProduct("Magic Mouse", user);
-                    AddProduct("iWatch Series 4", user);
-                    AddProduct("iPad Mini", user);
-                    await _context.SaveChangesAsync();
-                }
+                await _userHelper.AddUserToRoleAsync(user, "Admin");
             }
+
+            var isInRole = await _userHelper.IsUserInRoleAsync(user, "Admin");
+            if (!isInRole)
+            {
+                await _userHelper.AddUserToRoleAsync(user, "Admin");
+            }
+
+            if (!_context.Products.Any())
+            {
+                AddProduct("iPhone X", user);
+                AddProduct("Magic Mouse", user);
+                AddProduct("iWatch Series 4", user);
+                AddProduct("iPad Mini", user);
+                await _context.SaveChangesAsync();
+            }
+            
         }
 
 

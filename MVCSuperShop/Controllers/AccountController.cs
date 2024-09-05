@@ -83,27 +83,37 @@ namespace SuperShop.Controllers
                     };
 
                     var result = await _userHelper.AddUserAsync(user, model.Password);
-                    if(result != IdentityResult.Success)
+                    if (result != IdentityResult.Success)
                     {
                         ModelState.AddModelError(string.Empty, "The user couldn't be created.");
                         return View(model);
                     }
 
-                    var loginViewModel = new LoginViewModel
-                    {
-                        Password = model.Password,
-                        RememberMe = false,
-                        Username = model.Username
-                    };
-
-                    var result2 = await _userHelper.LoginAsync(loginViewModel);
-                    if(result2.Succeeded)
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-
-                    ModelState.AddModelError(string.Empty, "The user couldn't be loged.");
+                    await _userHelper.AddUserToRoleAsync(user, "Customer");
                 }
+
+                var isInRole = await _userHelper.IsUserInRoleAsync(user, "Customer");
+                if (!isInRole)
+                {
+                    await _userHelper.AddUserToRoleAsync(user, "Customer");
+                }
+
+
+                var loginViewModel = new LoginViewModel
+                {
+                    Password = model.Password,
+                    RememberMe = false,
+                    Username = model.Username
+                };
+
+                var result2 = await _userHelper.LoginAsync(loginViewModel);
+                if (result2.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ModelState.AddModelError(string.Empty, "The user couldn't be loged.");
+
             }
 
             return View(model);
