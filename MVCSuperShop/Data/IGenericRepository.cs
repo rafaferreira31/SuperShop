@@ -5,7 +5,7 @@ namespace SuperShop.Data
 {
     public interface IGenericRepository<T> where T : class
     {
-        IQueryable<T> GetAll(); //Método q devolve todas as entidades q o "T" tiver a usar
+        IQueryable<T> GetAll(); 
 
         Task<T> GetByIdAsync(int id);
 
