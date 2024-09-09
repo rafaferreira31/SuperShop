@@ -8,7 +8,7 @@ using SuperShop.Data;
 using SuperShop.Data.Entities;
 using SuperShop.Helpers;
 
-namespace MVCSuperShop
+namespace SuperShop
 {
     public class Program
     {
@@ -45,6 +45,12 @@ namespace MVCSuperShop
 
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/NotAuthorized";
+                options.AccessDeniedPath = "/Account/NotAuthorized";
+            });
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
@@ -58,6 +64,9 @@ namespace MVCSuperShop
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
