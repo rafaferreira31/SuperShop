@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SuperShop.Data.Entities;
 using SuperShop.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,7 +21,7 @@ namespace SuperShop.Data
 
         public async Task AddCityAsync(CityViewModel model)
         {
-            var country = await this.GetCountriesWithCitiesAsync(model.CountryId);
+            var country = await this.GetCountryWithCitiesAsync(model.CountryId);
 
             if (country == null)
             {
@@ -54,7 +57,7 @@ namespace SuperShop.Data
         }
 
 
-        public IQueryable GetCountriesWithCities()
+        public IQueryable GetCountryWithCities()
         {
             return _context.Countries
                 .Include(c => c.Cities)
@@ -62,7 +65,7 @@ namespace SuperShop.Data
         }
 
 
-        public async Task<Country> GetCountriesWithCitiesAsync(int id)
+        public async Task<Country> GetCountryWithCitiesAsync(int id)
         {
             return await _context.Countries
                 .Include(c => c.Cities)
@@ -93,5 +96,48 @@ namespace SuperShop.Data
                 .Where(c => c.Cities.Any(ci => ci.Id == city.Id))
                 .FirstOrDefaultAsync();
         }
+
+        public IEnumerable<SelectListItem> GetComboCountries()
+        {
+            var list = _context.Countries.Select(c => new SelectListItem
+            {
+                Text = c.Name,
+                Value = c.Id.ToString()
+            }).OrderBy(l => l.Text).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "(Select a country...)",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboCities(int countryId)
+        {
+            var country = _context.Countries.Find(countryId);
+            var list = new List<SelectListItem>();
+
+            if(country != null)
+            {
+                list = _context.Countries.Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+                }).OrderBy(l => l.Text).ToList();
+
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "(Select a city...)",
+                    Value = "0"
+                });
+
+            }
+
+            return list;
+        }
+
+      
     }
 }

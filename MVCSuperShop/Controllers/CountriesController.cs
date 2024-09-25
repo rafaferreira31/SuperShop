@@ -107,7 +107,7 @@ namespace SuperShop.Controllers
 
         public IActionResult Index()
         {
-            return View(_countryRepository.GetCountriesWithCities());
+            return View(_countryRepository.GetCountryWithCities());
         }
 
 
@@ -118,7 +118,7 @@ namespace SuperShop.Controllers
                 return NotFound();
             }
 
-            var country = await _countryRepository.GetCountriesWithCitiesAsync(id.Value);
+            var country = await _countryRepository.GetCountryWithCitiesAsync(id.Value);
             if (country == null)
             {
                 return NotFound();

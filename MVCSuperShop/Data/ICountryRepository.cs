@@ -10,10 +10,10 @@ namespace SuperShop.Data
 {
     public interface ICountryRepository : IGenericRepository<Country>
     {
-        IQueryable GetCountriesWithCities();
+        IQueryable GetCountryWithCities();
 
 
-        Task<Country> GetCountriesWithCitiesAsync(int id);
+        Task<Country> GetCountryWithCitiesAsync(int id);
 
 
         Task<City> GetCityAsync(int id);
@@ -26,6 +26,15 @@ namespace SuperShop.Data
 
 
         Task<int> DeleteCityAsync(City city);
+
+
+        IEnumerable<SelectListItem> GetComboCountries();
+
+
+        IEnumerable<SelectListItem> GetComboCities(int countryId);
+
+
+        Task<Country> GetCountryAsync(City city);
 
     }
 }
