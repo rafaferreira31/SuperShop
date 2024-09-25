@@ -46,6 +46,8 @@ namespace SuperShop
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
+            builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+          
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
