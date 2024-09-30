@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.VisualBasic;
 
 
 namespace SuperShop.Data.Entities
@@ -16,7 +12,7 @@ namespace SuperShop.Data.Entities
 
 
         [Required]
-        [Display(Name ="Order Date")]
+        [Display(Name = "Order Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime OrderDate { get; set; }
 
