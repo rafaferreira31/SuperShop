@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using SuperShop.Data.Entities;
 using SuperShop.Models;
 
+
 namespace SuperShop.Helpers
 {
     public class UserHelper : IUserHelper
@@ -11,31 +12,33 @@ namespace SuperShop.Helpers
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserHelper(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager)
+        public UserHelper(
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
         }
 
-
         public async Task<IdentityResult> AddUserAsync(User user, string password)
         {
             return await _userManager.CreateAsync(user, password);
         }
-
 
         public async Task AddUserToRoleAsync(User user, string roleName)
         {
             await _userManager.AddToRoleAsync(user, roleName);
         }
 
-
-        public async Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword)
+        public async Task<IdentityResult> ChangePasswordAsync(
+            User user,
+            string oldPassword,
+            string newPassword)
         {
             return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
         }
-
 
         public async Task CheckRoleAsync(string roleName)
         {
@@ -44,9 +47,20 @@ namespace SuperShop.Helpers
             {
                 await _roleManager.CreateAsync(new IdentityRole
                 {
-                    Name = roleName,
+                    Name = roleName
                 });
             }
+        }
+
+        public async Task<IdentityResult> ConfirmEmailAsync(User user, string token)
+        {
+            return await _userManager.ConfirmEmailAsync(user, token);
+        }
+
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(User user)
+        {
+            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
         }
 
 
@@ -55,6 +69,10 @@ namespace SuperShop.Helpers
             return await _userManager.FindByEmailAsync(email);
         }
 
+        public async Task<User> GetUserByIdAsync(string userId)
+        {
+            return await _userManager.FindByIdAsync(userId);
+        }
 
         public async Task<bool> IsUserInRoleAsync(User user, string roleName)
         {
@@ -71,12 +89,10 @@ namespace SuperShop.Helpers
                 false);
         }
 
-
         public async Task LogoutAsync()
         {
             await _signInManager.SignOutAsync();
         }
-
 
         public async Task<IdentityResult> UpdateUserAsync(User user)
         {
@@ -85,7 +101,10 @@ namespace SuperShop.Helpers
 
         public async Task<SignInResult> ValidatePasswordAsync(User user, string password)
         {
-            return await _signInManager.CheckPasswordSignInAsync(user, password, false);
+            return await _signInManager.CheckPasswordSignInAsync(
+                user,
+                password,
+                false);
         }
     }
 }

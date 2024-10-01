@@ -24,6 +24,8 @@ namespace SuperShop
 
             builder.Services.AddIdentity<User, IdentityRole>(cfg =>
             {
+                cfg.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+                cfg.SignIn.RequireConfirmedEmail = true;
                 cfg.User.RequireUniqueEmail = true;
                 cfg.Password.RequireDigit = false;
                 cfg.Password.RequiredUniqueChars = 0;
@@ -32,6 +34,7 @@ namespace SuperShop
                 cfg.Password.RequireNonAlphanumeric = false;
                 cfg.Password.RequiredLength = 6;
             })
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<DataContext>();
 
             builder.Services.AddAuthentication()
@@ -56,6 +59,8 @@ namespace SuperShop
             builder.Services.AddScoped<IUserHelper, UserHelper>();
             builder.Services.AddScoped<IBlobHelper, BlobHelper>();
             builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
+            builder.Services.AddScoped<IMailHelper, MailHelper>();
+
 
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();

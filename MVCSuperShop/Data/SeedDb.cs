@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using SuperShop.Data.Entities;
-using SuperShop.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using SuperShop.Data.Entities;
+using SuperShop.Helpers;
 
 namespace SuperShop.Data
 {
@@ -15,10 +15,10 @@ namespace SuperShop.Data
         private readonly IUserHelper _userHelper;
         private Random _random;
 
-        public SeedDb(DataContext context, IUserHelper UserHelper)
+        public SeedDb(DataContext context, IUserHelper userHelper)
         {
             _context = context;
-            _userHelper = UserHelper;
+            _userHelper = userHelper;
             _random = new Random();
         }
 
@@ -45,16 +45,16 @@ namespace SuperShop.Data
                 await _context.SaveChangesAsync();
             }
 
-            var user = await _userHelper.GetUserByEmailAsync("rafagallardo31@gmail.com");
+            var user = await _userHelper.GetUserByEmailAsync("rafa.testes@sapo.pt");
             if (user == null)
             {
                 user = new User
                 {
                     FirstName = "Rafael",
                     LastName = "Ferreira",
-                    Email = "rafagallardo31@gmail.com",
-                    UserName = "rafagallardo31@gmail.com",
-                    PhoneNumber = "987456321",
+                    Email = "rafa.testes@sapo.pt",
+                    UserName = "rafa.testes@sapo.pt",
+                    PhoneNumber = "212343555",
                     Address = "Rua Jau 33",
                     CityId = _context.Countries.FirstOrDefault().Cities.FirstOrDefault().Id,
                     City = _context.Countries.FirstOrDefault().Cities.FirstOrDefault()
@@ -67,6 +67,8 @@ namespace SuperShop.Data
                 }
 
                 await _userHelper.AddUserToRoleAsync(user, "Admin");
+                var token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                await _userHelper.ConfirmEmailAsync(user, token);
             }
 
             var isInRole = await _userHelper.IsUserInRoleAsync(user, "Admin");
@@ -83,9 +85,7 @@ namespace SuperShop.Data
                 AddProduct("iPad Mini", user);
                 await _context.SaveChangesAsync();
             }
-            
         }
-
 
         private void AddProduct(string name, User user)
         {
