@@ -9,6 +9,7 @@ using SuperShop.Data;
 using SuperShop.Data.Entities;
 using SuperShop.Helpers;
 using System.Text;
+using Vereyon.Web;
 
 namespace SuperShop
 {
@@ -66,7 +67,8 @@ namespace SuperShop
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
             builder.Services.AddScoped<ICountryRepository, CountryRepository>();
-          
+
+            builder.Services.AddFlashMessage();
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
